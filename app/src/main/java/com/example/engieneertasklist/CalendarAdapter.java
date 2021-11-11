@@ -1,5 +1,6 @@
 package com.example.engieneertasklist;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,14 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.engieneertasklist.Utils.CalendarUtils;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
-    private final ArrayList<String> daysofMonth;
+    private final ArrayList<LocalDate> days;
     private final OnItemListener onItemListener;
 
-    public CalendarAdapter(ArrayList<String> daysofMonth, OnItemListener onItemListener) {
-        this.daysofMonth = daysofMonth;
+    public CalendarAdapter(ArrayList<LocalDate> daysofMonth, OnItemListener onItemListener) {
+        this.days = daysofMonth;
         this.onItemListener = onItemListener;
     }
 
@@ -24,22 +28,41 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.calendar_cell,parent,false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = (int)(parent.getHeight() * 0.1666666666);
-        return  new CalendarViewHolder(view, onItemListener);
+        if(days.size() > 15 )
+        {
+            layoutParams.height = (int)(parent.getHeight() * 0.1666666666);
+        }
+        else
+        {
+            layoutParams.height = (int)(parent.getHeight());
+        }
+        return  new CalendarViewHolder(view, onItemListener,days);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
-        holder.dayofMonth.setText(daysofMonth.get(position));
+        final LocalDate localDate = days.get(position);
+        if(localDate == null)
+        {
+            holder.dayofMonth.setText("");
+        }
+        else
+        {
+            holder.dayofMonth.setText(String.valueOf(localDate.getDayOfMonth()));
+            if(localDate.equals(CalendarUtils.selectedDate))
+            {
+                holder.parentView.setBackgroundColor(Color.LTGRAY);
+            }
+        }
     }
 
     @Override
     public int getItemCount() {
-        return daysofMonth.size();
+        return days.size();
     }
 
     public interface OnItemListener
     {
-        void onItemClick(int position,String dayText);
+        void onItemClick(int position,LocalDate dayText);
     }
 }
