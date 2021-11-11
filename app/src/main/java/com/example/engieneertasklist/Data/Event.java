@@ -22,14 +22,31 @@ public class Event {
         return events;
     }
 
+    public static ArrayList<Event> eventsFromDateAndTime(LocalDate date, LocalTime time)
+    {
+        ArrayList<Event> events = new ArrayList<>();
+
+        for(Event event: eventsList)
+        {
+            int eventHour = event.time.getHour();
+            int cellHour = time.getHour();
+            if(event.getDate().equals(date) && eventHour == cellHour)
+            {
+                events.add(event);
+            }
+        }
+
+        return events;
+    }
+
     private String name;
     private LocalDate date;
-    private LocalTime Time;
+    private LocalTime time;
 
     public Event(String name, LocalDate date, LocalTime time) {
         this.name = name;
         this.date = date;
-        Time = time;
+        this.time = time;
     }
 
     public String getName() {
@@ -49,10 +66,10 @@ public class Event {
     }
 
     public LocalTime getTime() {
-        return Time;
+        return time;
     }
 
     public void setTime(LocalTime time) {
-        Time = time;
+        this.time = time;
     }
 }

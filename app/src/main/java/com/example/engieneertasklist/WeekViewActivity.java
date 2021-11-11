@@ -90,4 +90,7 @@ public class WeekViewActivity extends AppCompatActivity  implements CalendarAdap
         eventListView.setAdapter(eventAdapter);
     }
 
+    public void dailyAction(View view) {
+        startActivity(new Intent(this,DailyCalendarActivity.class));
+    }
 }
